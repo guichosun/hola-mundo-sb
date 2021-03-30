@@ -1,5 +1,6 @@
 package mx.ine.holamundo.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import mx.ine.holamundo.exception.MessageNotFoundException;
 import mx.ine.holamundo.model.Message;
+import mx.ine.holamundo.service.MessageService;
 
 /**
  * @author guichosun
@@ -20,6 +22,13 @@ import mx.ine.holamundo.model.Message;
 @RequestMapping("/api")
 public class MessageController {
 
+	private MessageService applicationService;
+
+	@Autowired
+    public void setMessageService(MessageService applicationService) {
+        this.applicationService = applicationService;
+    }
+    
 	@GetMapping("/mensaje")
 	@CrossOrigin
     public ResponseEntity<Message> getMessage() {
@@ -28,10 +37,10 @@ public class MessageController {
 	
 	@GetMapping("/mensaje/{id}")
 	@CrossOrigin
-	public ResponseEntity<Message> getMessage(@PathVariable("id") long id) {
+	public ResponseEntity<Message> getMessage(@PathVariable("id") int id) {
 		try {
-			return new ResponseEntity<Message>(HttpStatus.OK);
-//            return new ResponseEntity<Message>(applicationService.findApplication(id), HttpStatus.OK);
+//			return new ResponseEntity<Message>(HttpStatus.OK);
+            return new ResponseEntity<Message>(applicationService.findMessage(id), HttpStatus.OK);
 		} catch (MessageNotFoundException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mensaje no encontrado");
 		}

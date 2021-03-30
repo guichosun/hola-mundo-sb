@@ -1,9 +1,10 @@
 package mx.ine.holamundo.service;
 
-import java.util.List;
-import java.util.Optional;
+import mx.ine.holamundo.model.Message;
 
 public interface MessageService {
+	
+	Message findMessage(int id);
 }
 
 
